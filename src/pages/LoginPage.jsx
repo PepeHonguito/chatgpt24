@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input'; 
@@ -132,6 +132,14 @@ const LoginPage = ({ onAdminLogin }) => {
             </Button>
           </motion.div>
         </form>
+        <div className="mt-6 flex justify-between space-x-4">
+          <Link to="/diagnostico" className="w-1/2">
+            <Button variant="outline" className="w-full">Diagnóstico</Button>
+          </Link>
+          <Link to="/protocolo" className="w-1/2">
+            <Button variant="outline" className="w-full">Protocolo</Button>
+          </Link>
+        </div>
         <p className="mt-4 text-center text-xs text-muted-foreground">
           Acceso exclusivo para administración.
         </p>

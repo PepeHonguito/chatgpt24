@@ -5,7 +5,9 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  const isAdminRoute = location.pathname === '/' ||
+    location.pathname === '/empresa/login' ||
+    location.pathname.startsWith('/admin');
 
   return (
     <header className={`fixed top-0 w-full z-50 ${isAdminRoute ? 'bg-slate-800 shadow-lg' : 'glass-effect'}`}>
@@ -40,18 +42,18 @@ const Header = () => {
                 <Link to="/admin/servicios-tecnicos" className="text-gray-300 hover:text-white transition-colors flex items-center">
                   <Settings className="w-5 h-5 mr-1.5" /> Serv. Técnicos
                 </Link>
-                 <Link to="/" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                <Link to="/inicio" className="text-gray-300 hover:text-white transition-colors flex items-center">
                   <Users className="w-5 h-5 mr-1.5" /> Vista Cliente
                 </Link>
               </>
             ) : (
               <>
-                <a href="/#inicio" className="text-gray-700 hover:text-blue-600 transition-colors">Inicio</a>
-                <Link to="/admin/dashboard" className="text-gray-700 hover:text-blue-600 transition-colors">Empresa</Link>
+                <a href="/inicio#inicio" className="text-gray-700 hover:text-blue-600 transition-colors">Inicio</a>
+                <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Empresa</Link>
 
-                <a href="/#servicios" className="text-gray-700 hover:text-blue-600 transition-colors">Servicios</a>
-                <a href="/#productos" className="text-gray-700 hover:text-blue-600 transition-colors">Productos</a>
-                <a href="/#contacto" className="text-gray-700 hover:text-blue-600 transition-colors">Contacto</a>
+                <a href="/inicio#servicios" className="text-gray-700 hover:text-blue-600 transition-colors">Servicios</a>
+                <a href="/inicio#productos" className="text-gray-700 hover:text-blue-600 transition-colors">Productos</a>
+                <a href="/inicio#contacto" className="text-gray-700 hover:text-blue-600 transition-colors">Contacto</a>
               </>
             )}
           </motion.div>

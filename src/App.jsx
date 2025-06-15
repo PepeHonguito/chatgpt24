@@ -8,9 +8,9 @@ import HomePage from '@/pages/HomePage';
 import AdminInvoicingPage from '@/pages/AdminInvoicingPage';
 import AdminDashboardPage from '@/pages/AdminDashboardPage';
 import AdminTechnicalServicesPage from '@/pages/AdminTechnicalServicesPage';
-import ClientLoginPage from '@/pages/ClientLoginPage';
-import ClientDashboardPage from '@/pages/ClientDashboardPage';
 import LoginPage from '@/pages/LoginPage'; // login empresa
+import DiagnosticPage from '@/pages/DiagnosticPage';
+import ProtocolPage from '@/pages/ProtocolPage';
 
 
 const App = () => {
@@ -21,13 +21,14 @@ const App = () => {
         <Header />
         <div className="flex-grow">
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<LoginPage />} />
+            <Route path="/empresa/login" element={<LoginPage />} />
+            <Route path="/inicio" element={<HomePage />} />
+            <Route path="/diagnostico" element={<DiagnosticPage />} />
+            <Route path="/protocolo" element={<ProtocolPage />} />
             <Route path="/admin/facturacion" element={<AdminInvoicingPage />} />
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
             <Route path="/admin/servicios-tecnicos" element={<AdminTechnicalServicesPage />} />
-            <Route path="/cliente/login" element={<ClientLoginPage />} />
-            <Route path="/cliente/dashboard" element={<ClientDashboardPage />} />
-            <Route path="/empresa/login" element={<LoginPage />} />
           </Routes>
         </div>
         <Footer />
