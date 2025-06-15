@@ -1,24 +1,30 @@
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-
-const DiagnosticPage = () => {
-  // 📌 Datos del formulario
-  const [orderNumber, setOrderNumber] = useState("");
-  const [equipo, setEquipo] = useState("");
-  const [falla, setFalla] = useState("");
-  const [inspeccionVisual, setInspeccionVisual] = useState("");
-
-  const [onIndicator, setOnIndicator] = useState("si");
-  const [chargingIndication, setChargingIndication] = useState("si");
-  const [usbValue, setUsbValue] = useState("1.0");
-  const [detalleCarga, setDetalleCarga] = useState("");
-
-  // 📌 Estados del formulario
-  const [touchWorks, setTouchWorks] = useState(true);
-  const [signalWorking, setSignalWorking] = useState(true);
+  const [powerStatus, setPowerStatus] = useState('si');
+  const [powerIssue, setPowerIssue] = useState('logo');
+    if (powerStatus === 'si') {
+    } else if (powerStatus === 'no') {
+    } else {
+      if (powerIssue === 'logo') rep += '- Se queda en el logo.\n';
+      if (powerIssue === 'luz-apaga') rep += '- Da luz y se apaga.\n';
+      if (powerIssue === 'ruido') rep += '- Hace ruido.\n';
+        <div>
+          <Label className="mb-1 block">¿Enciende?</Label>
+          <div className="flex gap-2">
+            <Button variant={powerStatus === 'si' ? 'default' : 'outline'} onClick={() => setPowerStatus('si')}>
+              Sí
+            </Button>
+            <Button variant={powerStatus === 'no' ? 'default' : 'outline'} onClick={() => setPowerStatus('no')}>
+              No
+            </Button>
+            <Button variant={powerStatus === 'problema' ? 'default' : 'outline'} onClick={() => setPowerStatus('problema')}>
+              Otro
+            </Button>
+          {powerStatus === 'problema' && (
+            <select className="mt-2 w-full border rounded-md p-2" value={powerIssue} onChange={e => setPowerIssue(e.target.value)}>
+              <option value="logo">Se queda en el logo</option>
+              <option value="luz-apaga">Da luz y se apaga</option>
+              <option value="ruido">Hace ruido</option>
+            </select>
+          )}
   const [buzzerWorking, setBuzzerWorking] = useState(true);
   const [speakerWorking, setSpeakerWorking] = useState(true);
   const [mic1Working, setMic1Working] = useState(true);
