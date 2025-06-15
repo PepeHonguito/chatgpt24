@@ -8,34 +8,35 @@ import HomePage from '@/pages/HomePage';
 import AdminInvoicingPage from '@/pages/AdminInvoicingPage';
 import AdminDashboardPage from '@/pages/AdminDashboardPage';
 import AdminTechnicalServicesPage from '@/pages/AdminTechnicalServicesPage';
-import LoginPage from '@/pages/LoginPage'; // login empresa
+import LoginPage from '@/pages/LoginPage'; // login de empresa
 import DiagnosticPage from '@/pages/DiagnosticPage';
 import ProtocolPage from '@/pages/ProtocolPage';
 
 
 /**
- * Main application router. The business login screen acts as the landing page
- * so both the root URL and `/empresa/login` render the same component. The
- * marketing site is still available under `/inicio`.
+ * Enrutador principal de la aplicación. La pantalla de inicio de sesión de la
+ * empresa actúa como página de inicio, por lo que la raíz y
+ * `/empresa/login` muestran el mismo componente. El sitio de marketing sigue
+ * disponible en `/inicio`.
  */
 const App = () => {
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col">
-        {/* Toast container for notifications */}
+        {/* Contenedor de notificaciones */}
         <Toaster />
         <Header />
         <div className="flex-grow">
           <Routes>
-            {/* Empresa login is now the home page */}
+            {/* El login de empresa es la página principal */}
             <Route path="/" element={<LoginPage />} />
             <Route path="/empresa/login" element={<LoginPage />} />
-            {/* Public marketing site */}
+            {/* Sitio público de marketing */}
             <Route path="/inicio" element={<HomePage />} />
-            {/* Support tools */}
+            {/* Herramientas de soporte */}
             <Route path="/diagnostico" element={<DiagnosticPage />} />
             <Route path="/protocolo" element={<ProtocolPage />} />
-            {/* Admin dashboard and related pages */}
+            {/* Panel de administración y páginas relacionadas */}
             <Route path="/admin/facturacion" element={<AdminInvoicingPage />} />
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
             <Route path="/admin/servicios-tecnicos" element={<AdminTechnicalServicesPage />} />

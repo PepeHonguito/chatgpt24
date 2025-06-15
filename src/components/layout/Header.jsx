@@ -5,8 +5,9 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
   const location = useLocation();
-  // Apply a solid background and admin links when on the login page or any
-  // admin route. The marketing site keeps a translucent glass effect.
+  // Aplica fondo sólido y enlaces de administración cuando estamos en el
+  // login o en cualquier ruta de administración. El sitio de marketing
+  // mantiene el efecto translúcido.
   const isAdminRoute = location.pathname === '/' ||
     location.pathname === '/empresa/login' ||
     location.pathname.startsWith('/admin');
@@ -35,7 +36,7 @@ const Header = () => {
           >
             {isAdminRoute ? (
               <>
-                {/* Links shown when logged in as empresa/admin */}
+                {/* Enlaces visibles al ingresar como empresa/admin */}
                 <Link to="/admin/dashboard" className="text-gray-300 hover:text-white transition-colors flex items-center">
                   <Briefcase className="w-5 h-5 mr-1.5" /> Dashboard
                 </Link>
@@ -51,7 +52,7 @@ const Header = () => {
               </>
             ) : (
               <>
-                {/* Navigation for the public marketing site */}
+                {/* Navegación del sitio público de marketing */}
                 <a href="/inicio#inicio" className="text-gray-700 hover:text-blue-600 transition-colors">Inicio</a>
                 <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">Empresa</Link>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Placeholder for future repair protocol documentation
+// Pendiente: documentación detallada del protocolo de reparación
 
 const ProtocolPage = () => (
   <div className="min-h-screen flex items-center justify-center">

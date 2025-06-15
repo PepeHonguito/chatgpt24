@@ -1,24 +1,24 @@
-// Form for technicians to run a basic quality-control checklist
+// Formulario para que los técnicos realicen un control de calidad básico
 
-  // --- Form state ---
-  // Basic charging information
+  // --- Estado del formulario ---
+  // Información básica de carga
 
-  // Power on section
+  // Sección de encendido
   const [powerStatus, setPowerStatus] = useState('si');
   const [powerIssue, setPowerIssue] = useState('logo');
 
-  // Additional checks
+  // Comprobaciones adicionales
 
-  // Text generated after running the form
-  // Build a human readable report based on the form selections
+  // Texto generado tras completar el formulario
+  // Construir un informe legible basado en las selecciones
     if (powerStatus === 'si') {
     } else if (powerStatus === 'no') {
     } else {
       if (powerIssue === 'logo') rep += '- Se queda en el logo.\n';
       if (powerIssue === 'luz-apaga') rep += '- Da luz y se apaga.\n';
       if (powerIssue === 'ruido') rep += '- Hace ruido.\n';
-    // Simple clipboard helper
-  // Render form and generated report
+    // Copiar al portapapeles
+  // Renderizar formulario e informe generado
         <div>
           <Label className="mb-1 block">¿Enciende?</Label>
           <div className="flex gap-2">
