@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { Eye, EyeOff, LogIn, UserPlus } from 'lucide-react';
+import { Eye, EyeOff, LogIn } from 'lucide-react';
 
 const ClientLoginPage = ({ onClientLogin }) => {
   const [email, setEmail] = useState('');

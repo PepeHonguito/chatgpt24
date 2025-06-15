@@ -24,7 +24,7 @@ const Footer = () => {
             <ul className="space-y-2 text-gray-400">
               <li>Venta de Equipos</li>
               <li>Reparación de Celulares</li>
-              <li>Sofware</li>
+              <li>Software</li>
               <li>Accesorios</li>
             </ul>
           </div>
