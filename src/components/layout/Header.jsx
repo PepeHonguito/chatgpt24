@@ -47,7 +47,7 @@ const Header = () => {
             ) : (
               <>
                 <a href="/#inicio" className="text-gray-700 hover:text-blue-600 transition-colors">Inicio</a>
-                {false && (<Link to="/admin/dashboard" className="text-gray-700 hover:text-blue-600 transition-colors">Empresa</Link>)}
+                <Link to="/admin/dashboard" className="text-gray-700 hover:text-blue-600 transition-colors">Empresa</Link>
 
                 <a href="/#servicios" className="text-gray-700 hover:text-blue-600 transition-colors">Servicios</a>
                 <a href="/#productos" className="text-gray-700 hover:text-blue-600 transition-colors">Productos</a>
