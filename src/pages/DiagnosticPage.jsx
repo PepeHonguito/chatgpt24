@@ -1,11 +1,24 @@
+// Form for technicians to run a basic quality-control checklist
+
+  // --- Form state ---
+  // Basic charging information
+
+  // Power on section
   const [powerStatus, setPowerStatus] = useState('si');
   const [powerIssue, setPowerIssue] = useState('logo');
+
+  // Additional checks
+
+  // Text generated after running the form
+  // Build a human readable report based on the form selections
     if (powerStatus === 'si') {
     } else if (powerStatus === 'no') {
     } else {
       if (powerIssue === 'logo') rep += '- Se queda en el logo.\n';
       if (powerIssue === 'luz-apaga') rep += '- Da luz y se apaga.\n';
       if (powerIssue === 'ruido') rep += '- Hace ruido.\n';
+    // Simple clipboard helper
+  // Render form and generated report
         <div>
           <Label className="mb-1 block">¿Enciende?</Label>
           <div className="flex gap-2">

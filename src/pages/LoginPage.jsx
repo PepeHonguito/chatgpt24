@@ -132,6 +132,7 @@ const LoginPage = ({ onAdminLogin }) => {
             </Button>
           </motion.div>
         </form>
+        {/* Quick links for technicians */}
         <div className="mt-6 flex justify-between space-x-4">
           <Link to="/diagnostico" className="w-1/2">
             <Button variant="outline" className="w-full">Diagnóstico</Button>

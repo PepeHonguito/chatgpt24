@@ -196,6 +196,7 @@ const AdminDashboardPage = () => {
                   <Settings className="mr-2 h-5 w-5" /> Servicios Técnicos
                 </Button>
               </Link>
+              {/* Link back to the public marketing site */}
               <Link to="/inicio">
                 <Button variant="outline" className="w-full py-3 text-base">
                   <Activity className="mr-2 h-5 w-5" /> Ver Página Principal
