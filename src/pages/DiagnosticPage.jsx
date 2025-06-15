@@ -1,137 +1,416 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const DiagnosticPage = () => {
-  const [chargingIndication, setChargingIndication] = useState('yes');
-  const [usbValue, setUsbValue] = useState('1.0');
-  const [bootScreen, setBootScreen] = useState(true);
-  const [logoOnly, setLogoOnly] = useState(false);
-  const [deviceReaction, setDeviceReaction] = useState(false);
+  // 📌 Datos del formulario
+  const [orderNumber, setOrderNumber] = useState("");
+  const [equipo, setEquipo] = useState("");
+  const [falla, setFalla] = useState("");
+  const [inspeccionVisual, setInspeccionVisual] = useState("");
+
+  const [onIndicator, setOnIndicator] = useState("si");
+  const [chargingIndication, setChargingIndication] = useState("si");
+  const [usbValue, setUsbValue] = useState("1.0");
+  const [detalleCarga, setDetalleCarga] = useState("");
+
+  // 📌 Estados del formulario
   const [touchWorks, setTouchWorks] = useState(true);
   const [signalWorking, setSignalWorking] = useState(true);
-  const [wifiIssue, setWifiIssue] = useState('ok');
+  const [buzzerWorking, setBuzzerWorking] = useState(true);
+  const [speakerWorking, setSpeakerWorking] = useState(true);
+  const [mic1Working, setMic1Working] = useState(true);
+  const [mic2Working, setMic2Working] = useState(true);
+  const [wifiIssue, setWifiIssue] = useState("ok");
   const [cameraFocus, setCameraFocus] = useState(true);
-  const [report, setReport] = useState('');
+  const [report, setReport] = useState("");
 
+  // 🧾 Función para generar el informe basado en los datos
   const generateReport = () => {
-    let rep = 'Informe de Control de Calidad\n';
-    rep += 'Carga:\n';
-    if (chargingIndication === 'no') {
-      rep += '- No carga.\n';
-    } else {
-      const val = parseFloat(usbValue);
-      if (val >= 1.0) {
-        rep += '- Carga normalmente.\n';
-      } else if (val >= 0.5 && val <= 0.6) {
-        rep += '- Carga lento.\n';
-      } else if (val === 0) {
-        rep += '- Carga falsa. No carga.\n';
+    let rep = "*Informe*\n";
+
+    rep += orderNumber + " - " + equipo + " - " + falla + "\n\n";
+
+    if (inspeccionVisual) {
+      rep += "*Detalle:* " + inspeccionVisual + "\n\n";
+    }
+
+    rep += "*Diagnostico:*\n";
+    if (onIndicator === "si") {
+      rep += " - Enciende, Inicia normalmente.\n";
+
+      if (chargingIndication === "no") {
+        rep += " - No carga.\n";
+      } else if (chargingIndication === "-") {
+        rep += " - Carga: " + detalleCarga + "\n";
       } else {
-        rep += '- No carga.\n';
+        const val = parseFloat(usbValue);
+        if (val >= 0.9) {
+          rep += " - Carga normalmente.\n";
+        } else if (val <= 0.6) {
+          rep += " - Carga lento.\n";
+        } else if (val === 0) {
+          rep += " - Carga falsa / No carga.\n";
+        } else {
+          rep += " - No carga.\n";
+        }
+      }
+
+      rep += touchWorks ? " - Tactil: ok\n" : " - Tactil: x\n";
+
+      rep += signalWorking ? " - Señal: ok\n" : " - Señal: x\n";
+
+      rep += buzzerWorking ? " - Buzzer: ok\n" : " - Buzzer: x\n";
+
+      rep += speakerWorking ? " - Speaker: ok\n" : " - Speaker: x\n";
+
+      rep += mic1Working ? " - Mic1: ok\n" : " - Mic1: x\n";
+
+      rep += mic2Working ? " - Mic2: ok\n" : " - Mic2: x\n";
+
+      rep += " - Wi-fi / Bluetooth: ";
+      if (wifiIssue === "ok") rep += "ok\n";
+      if (wifiIssue === "no-enciende") rep += "Falla IC de Wi-fi/Bluetooth.\n";
+      if (wifiIssue === "baja-intensidad")
+        rep += "Falla antena Wi-fi/Bluetooth.\n";
+      if (wifiIssue === "sin-internet")
+        rep += "Software o IC de Wi-fi/Bluetooth.\n";
+
+      rep += " - Camaras: ";
+      rep += cameraFocus ? "ok\n" : "x\n";
+    } else if (onIndicator === "logo") {
+      rep += " - No inicia. *Probar soft*\n";
+    } else if (onIndicator === "sin imagen") {
+      rep += " - No da imagen.\n";
+    } else {
+      rep += " - No enciende.\n";
+    }
+
+    if (onIndicator != "si") {
+      if (chargingIndication === "no") {
+        rep += " - No carga.\n";
+      } else if (chargingIndication === "-") {
+        rep += " - Carga: " + detalleCarga + "\n";
+      } else {
+        const val = parseFloat(usbValue);
+        if (val >= 0.9) {
+          rep += " - Carga normalmente.\n";
+        } else if (val <= 0.6) {
+          rep += " - Carga lento.\n";
+        } else if (val === 0) {
+          rep += " - Carga falsa / No carga.\n";
+        } else {
+          rep += " - No carga.\n";
+        }
       }
     }
 
-    rep += '\nEncendido:\n';
-    if (bootScreen) {
-      rep += '- Inicia normalmente.\n';
-    } else if (logoOnly) {
-      rep += '- No inicia.\n';
-    } else if (deviceReaction) {
-      rep += '- No da imagen.\n';
-    } else {
-      rep += '- No enciende.\n';
-    }
-
-    rep += '\nT\u00e1ctil:\n';
-    rep += touchWorks ? '- Funciona correctamente.\n' : '- Falla el t\u00e1ctil.\n';
-
-    rep += '\nSe\u00f1al/Sonido/Micr\u00f3fono:\n';
-    rep += signalWorking ? '- Funcionan correctamente.\n' : '- Falla de se\u00f1al/sonido/micr\u00f3fono.\n';
-
-    rep += '\nWi-fi / Bluetooth:\n';
-    if (wifiIssue === 'ok') rep += '- Funcionan correctamente.\n';
-    if (wifiIssue === 'no-enciende') rep += '- Falla IC de Wi-fi/Bluetooth.\n';
-    if (wifiIssue === 'baja-intensidad') rep += '- Falla antena Wi-fi/Bluetooth.\n';
-    if (wifiIssue === 'sin-internet') rep += '- Software o IC de Wi-fi/Bluetooth.\n';
-
-    rep += '\nC\u00e1maras:\n';
-    rep += cameraFocus ? '- Enfocan bien.\n' : '- Falla c\u00e1mara.\n';
-
+    rep += "\n *COTIZAR* ";
     setReport(rep);
   };
 
+  // 📋 Función para copiar el informe al portapapeles
   const copyReport = () => {
     navigator.clipboard.writeText(report);
   };
 
+  // 🖼️ Render del componente
   return (
     <div className="min-h-screen py-12 px-4 bg-gradient-to-br from-slate-100 to-blue-100">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md space-y-6">
+        {/* 🔷 Título principal */}
         <h1 className="text-2xl font-bold text-center">Control de Calidad</h1>
+
+        {/* INFORMACIÓN DEL EQUIPO */}
         <div>
-          <Label className="mb-1 block">\u00bfMuestra indicios de carga?</Label>
-          <select
-            className="mt-1 w-full border rounded-md p-2"
-            value={chargingIndication}
-            onChange={e => setChargingIndication(e.target.value)}
-          >
-            <option value="yes">S\u00ed</option>
-            <option value="no">No</option>
-          </select>
+          <Label className="mb-1 block font-medium text-gray-800">
+            {/* 🔢 Campo: Número de orden */}
+            Número de orden
+          </Label>
+          <input
+            type="number"
+            value={orderNumber}
+            onChange={(e) => setOrderNumber(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2"
+            placeholder="1234"
+          />
+          <Label className="mb-1 block font-medium text-gray-800">
+            {/* 🔢 Campo: Equipo */}
+            Equipo
+          </Label>
+          <input
+            type="text"
+            value={equipo}
+            onChange={(e) => setEquipo(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2"
+            placeholder="Samsung A22 5G"
+          />
+          <Label className="mb-1 block font-medium text-gray-800">
+            {/* 🔢 Campo: Falla */}
+            Falla declarada
+          </Label>
+          <input
+            type="Text"
+            value={falla}
+            onChange={(e) => setFalla(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2"
+            placeholder="Modulo"
+          />
+          <Label className="mb-1 block font-medium text-gray-800">
+            {/* 🔢 Campo: Número de orden */}
+            Inspección visual
+          </Label>
+          <input
+            type="textarea"
+            value={inspeccionVisual}
+            onChange={(e) => setInspeccionVisual(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2"
+            placeholder="Modulo roto, camara rota, mancha en pantalla, etc..."
+          />
         </div>
-        {chargingIndication === 'yes' && (
+
+        {/* ESCENCIALES DEL EQUIPO */}
+        <div>
           <div>
-            <Label className="mb-1 block">Valor en TesterUSB (A)</Label>
-            <Input type="number" step="0.1" value={usbValue} onChange={e => setUsbValue(e.target.value)} />
+            <Label className="mb-1 block font-medium text-gray-800">
+              {/* ⚡ Pregunta: indicios de carga */}
+              Encendido: ¿Llega hasta la pantalla principal?
+            </Label>
+            <p className="text-sm text-gray-500 mb-2">Puede no tener carga.</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setOnIndicator("si")}
+                className={`text-xs px-3 py-1 rounded transition font-semibold
+        ${
+          onIndicator === "si"
+            ? "bg-green-500 text-white"
+            : "bg-white text-gray-800 border border-gray-300"
+        }`}
+              >
+                SI
+              </button>
+              <button
+                onClick={() => setOnIndicator("logo")}
+                className={`text-xs px-3 py-1 rounded transition font-semibold
+        ${
+          onIndicator === "logo"
+            ? "bg-red-500 text-white"
+            : "bg-white text-gray-800 border border-gray-300"
+        }`}
+              >
+                Logo
+              </button>
+              <button
+                onClick={() => setOnIndicator("sin imagen")}
+                className={`text-xs px-3 py-1 rounded transition font-semibold
+        ${
+          onIndicator === "sin imagen"
+            ? "bg-yellow-400 text-white"
+            : "bg-white text-gray-800 border border-gray-300"
+        }`}
+              >
+                Sin imagen
+              </button>
+              <button
+                onClick={() => setOnIndicator("no")}
+                className={`text-xs px-3 py-1 rounded transition font-semibold
+        ${
+          onIndicator === "no"
+            ? "bg-yellow-400 text-white"
+            : "bg-white text-gray-800 border border-gray-300"
+        }`}
+              >
+                No
+              </button>
+            </div>
+            {onIndicator === "no" && (
+              <div>
+                {/* 🔌 El equipo hace algo inusual */}
+                <Label className="mb-1 block">Detalles: </Label>
+                <Input
+                  type="textarea"
+                  placeholder="Se reinicia, queda en el logo..."
+                />
+              </div>
+            )}
           </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
           <div>
-            <Label className="mb-1 block">\u00bfMuestra pantalla de desbloqueo?</Label>
-            <input type="checkbox" checked={bootScreen} onChange={e => setBootScreen(e.target.checked)} />
+            <Label className="mb-1 block font-medium text-gray-800">
+              {/* ⚡ Pregunta: indicios de carga */}
+              Carga: ¿Muestra consumo?
+            </Label>
+            <p className="text-sm text-gray-500 mb-2">
+              El valor de una carga normal es mayor a 1.0 en celulares.
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setChargingIndication("si")}
+                className={`text-xs px-3 py-1 rounded transition font-semibold
+        ${
+          chargingIndication === "si"
+            ? "bg-green-500 text-white"
+            : "bg-white text-gray-800 border border-gray-300"
+        }`}
+              >
+                SI
+              </button>
+              <button
+                onClick={() => setChargingIndication("no")}
+                className={`text-xs px-3 py-1 rounded transition font-semibold
+        ${
+          chargingIndication === "no"
+            ? "bg-red-500 text-white"
+            : "bg-white text-gray-800 border border-gray-300"
+        }`}
+              >
+                NO
+              </button>
+              <button
+                onClick={() => setChargingIndication("-")}
+                className={`text-xs px-3 py-1 rounded transition font-semibold
+        ${
+          chargingIndication === "-"
+            ? "bg-yellow-400 text-white"
+            : "bg-white text-gray-800 border border-gray-300"
+        }`}
+              >
+                -
+              </button>
+            </div>
+            {chargingIndication === "si" && (
+              <div>
+                {/* 🔌 Campo adicional: valor del tester USB si respondió 'sí' */}
+                <Label className="mb-1 block">Valor en TesterUSB (A)</Label>
+                <Input
+                  type="number"
+                  step="0.1"
+                  value={usbValue}
+                  onChange={(e) => setUsbValue(e.target.value)}
+                />
+              </div>
+            )}
+            {chargingIndication === "-" && (
+              <div>
+                {/* 🔌 Campo adicional: valor del tester USB si respondió '-' */}
+                <Label className="mb-1 block">Detalle:</Label>
+                <Input
+                  type="textarea"
+                  value={detalleCarga}
+                  onChange={(e) => setDetalleCarga(e.target.value)}
+                />
+              </div>
+            )}
           </div>
-          <div>
-            <Label className="mb-1 block">\u00bfSolo queda en el logo?</Label>
-            <input type="checkbox" checked={logoOnly} onChange={e => setLogoOnly(e.target.checked)} />
-          </div>
-          <div>
-            <Label className="mb-1 block">Reacciona (vibraci\u00f3n/sonido)</Label>
-            <input type="checkbox" checked={deviceReaction} onChange={e => setDeviceReaction(e.target.checked)} />
-          </div>
         </div>
+
+        {/* 🔌 El Equipo enciende */}
         <div>
-          <Label className="mb-1 block">\u00bfT\u00e1ctil responde en toda la pantalla?</Label>
-          <input type="checkbox" checked={touchWorks} onChange={e => setTouchWorks(e.target.checked)} />
+          {onIndicator === "si" && (
+            <div>
+              <div>
+                <Label className="mb-1 block">
+                  {" "}
+                  ¿El tactil responde en toda la pantalla?{" "}
+                </Label>
+                <input
+                  type="checkbox"
+                  checked={touchWorks}
+                  onChange={(e) => setTouchWorks(e.target.checked)}
+                />
+              </div>
+
+              <div>
+                <Label className="mb-1 block">¿Tenemos señal SIM?</Label>
+                <input
+                  type="checkbox"
+                  checked={signalWorking}
+                  onChange={(e) => setSignalWorking(e.target.checked)}
+                />
+              </div>
+
+              <div>
+                <Label className="mb-1 block">Parlante 1 (Buzzer)</Label>
+                <input
+                  type="checkbox"
+                  checked={buzzerWorking}
+                  onChange={(e) => setBuzzerWorking(e.target.checked)}
+                />
+              </div>
+
+              <div>
+                <Label className="mb-1 block">Parlante 2 (Speaker)</Label>
+                <input
+                  type="checkbox"
+                  checked={speakerWorking}
+                  onChange={(e) => setSpeakerWorking(e.target.checked)}
+                />
+              </div>
+
+              <div>
+                <Label className="mb-1 block">
+                  Microfono 1 (Mic principal, llamadas)
+                </Label>
+                <input
+                  type="checkbox"
+                  checked={mic1Working}
+                  onChange={(e) => setMic1Working(e.target.checked)}
+                />
+              </div>
+
+              <div>
+                <Label className="mb-1 block">
+                  Microfono 2 (Altavoz, WhatsApp Audio)
+                </Label>
+                <input
+                  type="checkbox"
+                  checked={mic2Working}
+                  onChange={(e) => setMic2Working(e.target.checked)}
+                />
+              </div>
+
+              <div>
+                <Label className="mb-1 block">Cámaras</Label>
+                <input
+                  type="checkbox"
+                  checked={cameraFocus}
+                  onChange={(e) => setCameraFocus(e.target.checked)}
+                />
+              </div>
+
+              <div>
+                {/* 📡 Estado de conectividad Wi-Fi/Bluetooth */}
+                <Label className="mb-1 block">Estado Wi-fi/Bluetooth</Label>
+                <select
+                  className="mt-1 w-full border rounded-md p-2"
+                  value={wifiIssue}
+                  onChange={(e) => setWifiIssue(e.target.value)}
+                >
+                  <option value="ok">Funciona</option>
+                  <option value="no-enciende">
+                    No enciende / no encuentra
+                  </option>
+                  <option value="baja-intensidad">Baja intensidad</option>
+                  <option value="sin-internet">Se conecta sin internet</option>
+                </select>
+              </div>
+            </div>
+          )}
         </div>
-        <div>
-          <Label className="mb-1 block">\u00bfSe\u00f1al, sonido y micr\u00f3fono funcionan?</Label>
-          <input type="checkbox" checked={signalWorking} onChange={e => setSignalWorking(e.target.checked)} />
-        </div>
-        <div>
-          <Label className="mb-1 block">Estado Wi-fi/Bluetooth</Label>
-          <select
-            className="mt-1 w-full border rounded-md p-2"
-            value={wifiIssue}
-            onChange={e => setWifiIssue(e.target.value)}
-          >
-            <option value="ok">Funciona</option>
-            <option value="no-enciende">No enciende / no encuentra</option>
-            <option value="baja-intensidad">Baja intensidad</option>
-            <option value="sin-internet">Se conecta sin internet</option>
-          </select>
-        </div>
-        <div>
-          <Label className="mb-1 block">\u00bfC\u00e1maras enfocan bien?</Label>
-          <input type="checkbox" checked={cameraFocus} onChange={e => setCameraFocus(e.target.checked)} />
-        </div>
-        <Button onClick={generateReport} className="w-full">Generar Informe</Button>
+
+        {/* 🧾 Botón para generar el informe */}
+        <Button onClick={generateReport} className="w-full">
+          Generar Informe
+        </Button>
+        {/* 📋 Mostrar informe y botón de copia si existe resultado */}
         {report && (
           <div>
             <Textarea readOnly value={report} className="mt-4" />
-            <Button variant="outline" onClick={copyReport} className="mt-2">Copiar</Button>
+            <Button variant="outline" onClick={copyReport} className="mt-2">
+              Copiar
+            </Button>
           </div>
         )}
       </div>
