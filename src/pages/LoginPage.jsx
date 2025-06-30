@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -6,12 +6,67 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from "@/components/ui/use-toast";
 import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { fetchSheets } from '@/lib/googleSheets';
 
 const LoginPage = ({ onAdminLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [sheetData, setSheetData] = useState({});
+  const [showTables, setShowTables] = useState(false);
+
+  const sheetsConfig = {
+    byte: { id: '1OSgVYJC-H8KCS_zV_iuT_IYiHalvUQ8PHnmbGuoxazk', gid: '0' },
+    jm: { id: '11PyDaHItS4BU8SJmGzszvdlsd_CMBlY9b7SuTrbYtjY', gid: '0' },
+    wp: { id: '1OzqCLrl6f4rgoyXnKWeL6iKw10THaHoH', gid: '1943995788' },
+  };
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const result = await fetchSheets(sheetsConfig);
+        setSheetData(result);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    load();
+  }, []);
+
+  const renderTable = (items = [], title) => {
+    if (!items.length) return null;
+    const headers = Object.keys(items[0]);
+    return (
+      <div className="mb-8">
+        <h2 className="text-xl font-semibold text-center mb-2">{title}</h2>
+        <div className="overflow-auto">
+          <table className="min-w-full border border-gray-300 text-sm">
+            <thead className="bg-gray-200">
+              <tr>
+                {headers.map((h) => (
+                  <th key={h} className="border px-2 py-1 text-left">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((row, idx) => (
+                <tr key={idx} className={idx % 2 ? 'bg-gray-50' : ''}>
+                  {headers.map((h) => (
+                    <td key={h} className="border px-2 py-1">
+                      {row[h]}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  };
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -39,7 +94,7 @@ const LoginPage = ({ onAdminLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-100 to-blue-100 dark:from-slate-800 dark:to-slate-900">
+    <div className="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-100 to-blue-100 dark:from-slate-800 dark:to-slate-900">
       <motion.div 
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -133,18 +188,34 @@ const LoginPage = ({ onAdminLogin }) => {
           </motion.div>
         </form>
         {/* Accesos rápidos para técnicos */}
-        <div className="mt-6 flex justify-between space-x-4">
-          <Link to="/diagnostico" className="w-1/2">
-            <Button variant="outline" className="w-full">Diagnóstico</Button>
-          </Link>
-          <Link to="/protocolo" className="w-1/2">
-            <Button variant="outline" className="w-full">Protocolo</Button>
-          </Link>
+        <div className="mt-6">
+          <div className="flex justify-between space-x-4">
+            <Link to="/diagnostico" className="w-1/2">
+              <Button variant="outline" className="w-full">Diagnóstico</Button>
+            </Link>
+            <Link to="/protocolo" className="w-1/2">
+              <Button variant="outline" className="w-full">Protocolo</Button>
+            </Link>
+          </div>
+          <Button
+            variant="outline"
+            className="w-1/2 mt-2"
+            onClick={() => setShowTables((v) => !v)}
+          >
+            {showTables ? 'Ocultar listas' : 'Mostrar listas'}
+          </Button>
         </div>
         <p className="mt-4 text-center text-xs text-muted-foreground">
           Acceso exclusivo para administración.
         </p>
       </motion.div>
+      {showTables && (
+        <div className="mt-8 w-full max-w-4xl">
+          {renderTable(sheetData.jm, 'JM')}
+          {renderTable(sheetData.wp, 'WP')}
+          {renderTable(sheetData.byte, 'Byte')}
+        </div>
+      )}
     </div>
   );
 };
