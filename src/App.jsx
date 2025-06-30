@@ -9,7 +9,6 @@ import AdminInvoicingPage from '@/pages/AdminInvoicingPage';
 import AdminDashboardPage from '@/pages/AdminDashboardPage';
 import AdminTechnicalServicesPage from '@/pages/AdminTechnicalServicesPage';
 import LoginPage from '@/pages/LoginPage'; // login de empresa
-import DiagnosticPage from '@/pages/DiagnosticPage';
 import ProtocolPage from '@/pages/ProtocolPage';
 
 
@@ -34,7 +33,6 @@ const App = () => {
             {/* Sitio público de marketing */}
             <Route path="/inicio" element={<HomePage />} />
             {/* Herramientas de soporte */}
-            <Route path="/diagnostico" element={<DiagnosticPage />} />
             <Route path="/protocolo" element={<ProtocolPage />} />
             {/* Panel de administración y páginas relacionadas */}
             <Route path="/admin/facturacion" element={<AdminInvoicingPage />} />
